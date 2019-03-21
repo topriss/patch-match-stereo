@@ -4,10 +4,11 @@ set( PROJ_NAME pm )
 project( ${PROJ_NAME} )
 
 # cxx flags
-set( CMAKE_CXX_STANDARD 11 )
 if( NOT CMAKE_BUILD_TYPE )
 	set(CMAKE_BUILD_TYPE Release)
 endif()
+set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O3")
 # cuda
 set ( CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-10.0/" )
 # opencv

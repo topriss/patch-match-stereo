@@ -1,8 +1,11 @@
 #include <pm.h>
 #include <random>
+#include <thread>
+#include <time.h>
+#include <unistd.h>
 
 #define WINDOW_SIZE 35
-#define MAX_DISPARITY 128
+#define MAX_DISPARITY 255
 #define PLANE_PENALTY 120
 
 
@@ -78,7 +81,7 @@ namespace pm
         x_grad = x_grad / 8.f;
         y_grad = y_grad / 8.f;
         
-        //#pragma omp parallel for
+        #pragma omp parallel for
         for (int y = 0; y < frame.rows; ++y) {
             for (int x = 0; x < frame.cols; ++x) {
                 grad(y, x)[0] = x_grad.at<float>(y, x);
@@ -189,7 +192,11 @@ namespace pm
         //cv::normalize(raw_disp, disp, 0, 255, cv::NORM_MINMAX, CV_8UC1);
     }
 
-    
+    double doubleRand(double min, double max) {
+        thread_local std::mt19937 generator(std::random_device{}());
+        std::uniform_real_distribution<double> distribution(min, max);
+        return distribution(generator);
+    }
     
     void PatchMatch::initialize_random_planes(Matrix2D<Plane> &planes, float max_d)
     {
@@ -201,12 +208,16 @@ namespace pm
         {
             for(int x=0; x<cols; ++x)
             {
-                float z = random_generator.uniform(.0f, max_d); // random disparity
+                // float z = random_generator.uniform(.0f, max_d); // random disparity
+                float z = doubleRand(.0f, max_d*4.0) / 4.0; // random disparity
                 cv::Vec3f point(x, y, z);
                 
-                float nx = ((float)std::rand() - RAND_HALF) / RAND_HALF;
-                float ny = ((float)std::rand() - RAND_HALF) / RAND_HALF;
-                float nz = ((float)std::rand() - RAND_HALF) / RAND_HALF;
+                // float nx = ((float)std::rand() - RAND_HALF) / RAND_HALF;
+                // float ny = ((float)std::rand() - RAND_HALF) / RAND_HALF;
+                // float nz = ((float)std::rand() - RAND_HALF) / RAND_HALF;
+                float nx = doubleRand(-1.0, 1.0);
+                float ny = doubleRand(-1.0, 1.0);
+                float nz = doubleRand(-1.0, 1.0);
                 cv::Vec3f normal(nx,ny,nz);
                 cv::normalize(normal, normal);
                 

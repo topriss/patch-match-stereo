@@ -1,7 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <pm.h>
-
+#include <omp.h>
 
 bool check_image(const cv::Mat &image, std::string name="Image")
 {
