@@ -51,15 +51,16 @@ int main(int argc, char** argv)
 	patch_match.postProcess();
 	
 	cv::Mat1f disp1 = patch_match.getLeftDisparityMap();
-	cv::Mat1f disp2 = patch_match.getRightDisparityMap();
+	// cv::Mat1f disp2 = patch_match.getRightDisparityMap();
 	
-	cv::normalize(disp1, disp1, 0, 255, cv::NORM_MINMAX);
-	cv::normalize(disp2, disp2, 0, 255, cv::NORM_MINMAX);
+	// cv::normalize(disp1, disp1, 0, 255, cv::NORM_MINMAX);
+	// cv::normalize(disp2, disp2, 0, 255, cv::NORM_MINMAX);
 	
 	try
 	{
-		cv::imwrite("left_disparity.png", disp1);
-		cv::imwrite("right_disparity.png", disp2);
+		// cv::imwrite("left_disparity.png", disp1);
+		// cv::imwrite("right_disparity.png", disp2);
+		cv::imwrite(argv[3],disp1);
 	} 
 	catch(std::exception &e)
 	{
